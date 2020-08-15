@@ -45,6 +45,7 @@ lazy_static! {
     static ref NAME: Atom = Atom::from("container_name");
     static ref STREAM: Atom = Atom::from("stream");
     static ref CONTAINER: Atom = Atom::from("container_id");
+    static ref HOSTNAME_GALORE: Atom = Atom::from("hostname_galore");
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
@@ -813,6 +814,9 @@ impl ContainerLogInfo {
             // Timestamp of the container creation.
             log_event.insert(CREATED_AT.clone(), self.metadata.created_at);
 
+            log_event.insert(HOSTNAME_GALORE.clone(), self.metadata.hostname_galore.clone());
+
+
             // Return the resulting log event.
             log_event
         };
@@ -884,6 +888,7 @@ struct ContainerMetadata {
     image: Value,
     /// created_at
     created_at: DateTime<Utc>,
+    hostname_galore: Value,
 }
 
 impl ContainerMetadata {
@@ -907,6 +912,7 @@ impl ContainerMetadata {
             name: name.as_str().trim_start_matches('/').into(),
             image: config.image.unwrap().as_str().into(),
             created_at: DateTime::parse_from_rfc3339(created.as_str())?.with_timezone(&Utc),
+            hostname_galore: "LOLOLOLOLOLOLOLOLOLOLOLOL".to_string().into(),
         })
     }
 }
